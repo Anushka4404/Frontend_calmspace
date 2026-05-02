@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Memory Game 🧠</title>
+
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      background: #fefce8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .card {
+      width: 80px;
+      height: 80px;
+      background: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #end-screen {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: #facc15;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    /* 📱 Mobile enhancements */
+  @media (max-width: 480px) {
+    .grid {
+      gap: 15px;
+      max-width: 320px;
+    }
+
+    .card {
+      border-radius: 14px;
+    }
+
+    #score {
+      font-size: 20px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+
+<h2>Memory Relax Game 🧠</h2>
+
+<div id="score">Moves: 0</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- END SCREEN -->
+<div id="end-screen">
+  <h2>🎉 Well Played!</h2>
+  <p id="final-score"></p>
+  <button onclick="restartGame()">Play Again</button>
+</div>
+
+<script>
+const emojis = ["🍎","🍎","🐶","🐶","🌸","🌸","🚗","🚗"];
+let shuffled = emojis.sort(() => 0.5 - Math.random());
+
+let first = null;
+let second = null;
+
+let moves = 0;
+let matchedPairs = 0;
+const totalPairs = emojis.length / 2;
+
+const grid = document.getElementById("grid");
+const scoreEl = document.getElementById("score");
+
+shuffled.forEach((emoji) => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.value = emoji;
+  card.innerText = "";
+
+  card.onclick = () => {
+    // prevent double click / clicking same card
+    if (card.innerText !== "" || second) return;
+
+    card.innerText = emoji;
+
+    if (!first) {
+      first = card;
+    } else {
+      second = card;
+      moves++;
+      scoreEl.innerText = "Moves: " + moves;
+
+      if (first.dataset.value !== second.dataset.value) {
+        setTimeout(() => {
+          first.innerText = "";
+          second.innerText = "";
+          first = null;
+          second = null;
+        }, 600);
+      } else {
+        matchedPairs++;
+        first = null;
+        second = null;
+
+        // 🎯 GAME COMPLETE
+        if (matchedPairs === totalPairs) {
+          setTimeout(endGame, 500);
+        }
+      }
+    }
+  };
+
+  grid.appendChild(card);
+});
+
+function endGame() {
+  const endScreen = document.getElementById("end-screen");
+  const finalScore = document.getElementById("final-score");
+
+  // smart feedback 😄
+  if (moves <= 8) {
+    finalScore.innerText = `🔥 Amazing! You finished in ${moves} moves`;
+  } else if (moves <= 12) {
+    finalScore.innerText = `😊 Good job! ${moves} moves`;
+  } else {
+    finalScore.innerText = `😄 Nice try! ${moves} moves`;
+  }
+
+  endScreen.style.display = "block";
+}
+
+function restartGame() {
+  location.reload();
+}
+</script>
+
+</body>
+</html>

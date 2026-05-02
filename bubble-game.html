@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pop the Stress 🎈</title>
+
+  <style>
+    /* body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #dbeafe, #f0f9ff);
+    }
+
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .bubble {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(173, 216, 230, 0.7);
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      
+    }
+
+    .bubble:hover {
+      transform: scale(1.1);
+    }
+
+    #score {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 20px;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #timer {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 20px;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #start-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #60a5fa;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    #start-btn:hover {
+      background: #3b82f6;
+    }
+
+    #end-screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      text-align: center;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    #end-screen button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: #60a5fa;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .bubble.pop {
+  animation: popAnim 0.25s ease-out forwards;
+}
+
+@keyframes popAnim {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+.pop-text {
+  position: absolute;
+  color: #2563eb;
+  font-weight: bold;
+  font-size: 18px;
+  pointer-events: none;
+  animation: floatUp 0.6s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+} */
+ body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #dbeafe, #f0f9ff);
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* 🔥 Responsive Bubble */
+.bubble {
+  position: absolute;
+  width: 8vw;
+  height: 8vw;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 50%;
+  background: rgba(173, 216, 230, 0.7);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.bubble:hover {
+  transform: scale(1.1);
+}
+
+/* 🔥 Top UI */
+#score, #timer {
+  position: absolute;
+  top: 10px;
+  font-size: 16px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+#score {
+  left: 10px;
+}
+
+#timer {
+  right: 10px;
+}
+
+/* 🔥 Start Button */
+#start-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  background: #60a5fa;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#start-btn:hover {
+  background: #3b82f6;
+}
+
+/* 🔥 End Screen */
+#end-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85%;
+  max-width: 300px;
+  transform: translate(-50%, -50%);
+  display: none;
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+#end-screen button {
+  margin-top: 10px;
+  padding: 10px 16px;
+  border: none;
+  background: #60a5fa;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Animations */
+.bubble.pop {
+  animation: popAnim 0.25s ease-out forwards;
+}
+
+@keyframes popAnim {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.7; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+/* 🔥 Mobile tweaks */
+@media (max-width: 480px) {
+  #score, #timer {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  #start-btn {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
+  </style>
+
+</head>
+
+<body>
+
+<div id="game-container">
+  <div id="score">Score: 0</div>
+  <div id="timer">Time: 30</div>
+
+<button id="start-btn">Start Game 🎮</button>
+
+  <div id="end-screen">
+    <h2>Great job 💙</h2>
+    <p id="final-score"></p>
+    <button onclick="startGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+let score = 0;
+let timeLeft = 30;
+let gameInterval;
+let bubbleInterval;
+let gameActive = false;
+
+const container = document.getElementById("game-container");
+const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("timer");
+const startBtn = document.getElementById("start-btn");
+const endScreen = document.getElementById("end-screen");
+const finalScore = document.getElementById("final-score");
+
+startBtn.onclick = startGame;
+
+function startGame() {
+  score = 0;
+  timeLeft = 30;
+  gameActive = true;
+
+  scoreEl.innerText = "Score: 0";
+  timerEl.innerText = "Time: 30";
+
+  startBtn.style.display = "none";
+  endScreen.style.display = "none";
+
+  clearBubbles();
+
+  gameInterval = setInterval(updateTimer, 1000);
+  bubbleInterval = setInterval(createBubble, 1200);
+}
+
+function updateTimer() {
+  timeLeft--;
+  timerEl.innerText = "Time: " + timeLeft;
+
+  if (timeLeft <= 0) {
+    endGame();
+  }
+}
+
+function createBubble() {
+  if (!gameActive) return;
+  if (document.querySelectorAll(".bubble").length > 15) return;
+  
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  const size = Math.random() * 40 + 40;
+  bubble.style.width = size + "px";
+  bubble.style.height = size + "px";
+
+  // bubble.style.left = Math.random() * (window.innerWidth - size) + "px";
+  bubble.style.left = Math.random() * (container.clientWidth - size) + "px";
+  bubble.style.top = window.innerHeight + "px";
+
+  container.appendChild(bubble);
+
+  let position = window.innerHeight;
+
+  const float = setInterval(() => {
+    position -= 1;
+    bubble.style.top = position + "px";
+
+    if (position < -100) {
+      bubble.remove();
+      clearInterval(float);
+    }
+  }, 16);
+
+//   bubble.onclick = () => {
+//     if (!gameActive) return;
+
+//     bubble.remove();
+//     clearInterval(float);
+
+//     score++;
+//     scoreEl.innerText = "Score: " + score;
+//   };
+
+
+// bubble.onclick = () => {
+//   if (!gameActive) return;
+
+//   // Burst animation
+//   bubble.classList.add("pop");
+
+//   // Show +1 effect
+//   const popText = document.createElement("div");
+//   popText.className = "pop-text";
+//   popText.innerText = "+1";
+//   popText.style.left = bubble.style.left;
+//   popText.style.top = bubble.style.top;
+
+//   container.appendChild(popText);
+
+//   setTimeout(() => {
+//     popText.remove();
+//   }, 600);
+
+//   // Remove bubble after animation
+//   setTimeout(() => {
+//     bubble.remove();
+//   }, 200);
+//   navigator.vibrate(30); // mobile vibration
+//   // Increase score
+//   score++;
+//   scoreEl.innerText = "Score: " + score;
+// };
+//     bubble.addEventListener("click", () => {
+//     if (!gameActive) return;
+
+//     // prevent double click bug
+//     if (bubble.classList.contains("popped")) return;
+//     bubble.classList.add("popped");
+
+//     // animation
+//     bubble.classList.add("pop");
+
+//     // increase score
+//     score++;
+//     scoreEl.innerText = "Score: " + score;
+
+//     // remove after animation
+//     setTimeout(() => {
+//         bubble.remove();
+//     }, 200);
+//     }
+//   );
+const popBubble = () => {
+  if (!gameActive) return;
+  if (bubble.classList.contains("popped")) return;
+
+  bubble.classList.add("popped");
+  bubble.classList.add("pop");
+
+  score++;
+  scoreEl.innerText = "Score: " + score;
+
+  if (navigator.vibrate) navigator.vibrate(20); // mobile feedback
+
+  setTimeout(() => {
+    bubble.remove();
+  }, 200);
+};
+
+// Support both click + touch
+bubble.addEventListener("click", popBubble);
+bubble.addEventListener("touchstart", popBubble);
+}
+
+function clearBubbles() {
+  document.querySelectorAll(".bubble").forEach(b => b.remove());
+}
+
+function endGame() {
+  gameActive = false;
+
+  clearInterval(gameInterval);
+  clearInterval(bubbleInterval);
+  clearBubbles();
+
+  finalScore.innerText = "You popped " + score + " bubbles 🎈";
+  endScreen.style.display = "block";
+  startBtn.style.display = "block";
+}
+</script>
+
+</body>
+</html>

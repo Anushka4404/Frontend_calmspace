@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gratitude Game 💙</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f0f9ff;
+      padding: 40px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 350px;
+      margin: auto;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #60a5fa;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #activity {
+      margin-top: 20px;
+    }
+
+    canvas {
+      border: 1px solid black;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2 id="prompt">Click something you're grateful for 💙</h2>
+
+  <input id="answer" placeholder="Type here..." />
+
+  <br>
+  <button onclick="submitAnswer()">Submit</button>
+
+  <p id="msg"></p>
+
+  <!-- 🔥 NEW: Activity Area -->
+  <div id="activity"></div>
+</div>
+
+<script>
+const BASE_URL = "https://backend-calmspace.onrender.com";
+const prompts = [
+  "Something that made you smile today 😊",
+  "A person you're grateful for 💙",
+  "One good thing in your life ✨",
+  "Something you love doing ❤️"
+];
+
+function randomPrompt() {
+  document.getElementById("prompt").innerText =
+    prompts[Math.floor(Math.random() * prompts.length)];
+}
+
+randomPrompt();
+
+async function submitAnswer() {
+  const answer = document.getElementById("answer").value;
+
+  if (!answer) return;
+
+  // 🔥 send to backend
+  await fetch(`${BASE_URL}/api/gratitude`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ text: answer })
+  });
+
+  document.getElementById("msg").innerText = "💙 Saved!";
+  document.getElementById("answer").value = "";
+
+  // 🔥 trigger activity
+  triggerActivity(answer);
+
+  randomPrompt();
+}
+
+// 🎯 MAIN LOGIC
+function triggerActivity(text) {
+  const input = text.toLowerCase();
+  const activity = document.getElementById("activity");
+
+  // 🎤 Singing
+  if (input.includes("sing")) {
+    activity.innerHTML = `
+      <h3>🎤 Sing your favorite line!</h3>
+      <p>Take 10 seconds and sing something you love 💙</p>
+      <button onclick="alert('🎶 That was awesome!')">Done</button>
+    `;
+  }
+
+  // 🎨 Drawing
+  else if (input.includes("draw")) {
+    activity.innerHTML = `
+      <h3>🎨 Express yourself!</h3>
+      <canvas id="canvas" width="300" height="200"></canvas>
+      <p>Draw anything you like 💙</p>
+    `;
+    enableDrawing();
+  }
+
+  // 🎧 Music
+  else if (input.includes("music") || input.includes("song")) {
+    activity.innerHTML = `
+      <h3>🎧 Relax with music</h3>
+      <p>Close your eyes and hum your favorite tune 💙</p>
+    `;
+  }
+
+  // ✨ Default
+  else {
+    activity.innerHTML = `
+      <h3>✨ That’s beautiful!</h3>
+      <p>Take a moment and appreciate it 💙</p>
+    `;
+  }
+}
+
+// 🎨 Drawing logic
+function enableDrawing() {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  let drawing = false;
+
+  canvas.addEventListener("mousedown", () => drawing = true);
+  canvas.addEventListener("mouseup", () => drawing = false);
+
+  canvas.addEventListener("mousemove", (e) => {
+    if (!drawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.fillRect(
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+      4,
+      4
+    );
+  });
+}
+</script>
+
+</body>
+</html>
