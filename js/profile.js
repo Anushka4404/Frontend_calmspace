@@ -1,5 +1,5 @@
 // Profile Page JavaScript
-const BASE_URL = "https://backend-calmspace.onrender.com";
+const BASE_URL = "http://localhost:5001";
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in
@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API Configuration - use environment config
     const apiConfig = window.ENV_CONFIG || {
-        backendApiUrl: `${BASE_URL}/api`,
-        mlServiceUrl: `${BASE_URL}/predict_emotion`
+        backendApiUrl: `http://localhost:5001/api`,
+        mlServiceUrl: `http://localhost:5001/predict_emotion`
     };
     
     // Initialize the page

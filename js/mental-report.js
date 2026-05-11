@@ -978,34 +978,75 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    window.emailReport = async function(reportId) {
-        try {
-            // Find the button that was clicked and show loading state
-            const button = event.target.closest('button');
-            const originalText = button.innerHTML;
+    // window.emailReport = async function(reportId, event) {
+    //     try {
+    //         // Find the button that was clicked and show loading state
+    //         const button = event.target.closest('button');
+    //         const originalText = button.innerHTML;
+    //         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    //         button.disabled = true;
+
+    //         const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/email-report`, {
+    //             method: 'POST',
+    //             headers,
+    //             body: JSON.stringify({ reportId })
+    //         });
+
+    //         if (response.ok) {
+    //             showSuccess('Detailed report sent to your email successfully!');
+    //         } else {
+    //             throw new Error('Failed to send email');
+    //         }
+    //     } catch (error) {
+    //         showError('Failed to send email. Please try again.');
+    //     } finally {
+    //         // Reset button state
+    //         const button = event.target.closest('button');
+    //         button.innerHTML = '<i class="fas fa-envelope"></i> Email';
+    //         button.disabled = false;
+    //     }
+    // };
+    window.emailReport = async function(reportId, event) {
+
+    const button = event?.target?.closest('button');
+
+    try {
+
+        if(button){
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             button.disabled = true;
+        }
 
-            const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/email-report`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ reportId })
-            });
+        const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/email-report`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ reportId })
+        });
 
-            if (response.ok) {
-                showSuccess('Detailed report sent to your email successfully!');
-            } else {
-                throw new Error('Failed to send email');
-            }
-        } catch (error) {
-            showError('Failed to send email. Please try again.');
-        } finally {
-            // Reset button state
-            const button = event.target.closest('button');
+        if (response.ok) {
+            showSuccess('Detailed report sent to your email successfully!');
+        } else {
+
+            const data = await response.json();
+            console.log(data);
+
+            throw new Error(data.message || 'Failed to send email');
+        }
+
+    } catch (error) {
+
+        console.log("EMAIL ERROR:", error);
+
+        showError(error.message || 'Failed to send email. Please try again.');
+
+    } finally {
+
+        if(button){
             button.innerHTML = '<i class="fas fa-envelope"></i> Email';
             button.disabled = false;
         }
-    };
+    }
+};
 
     // Add global function for PDF download from history
     window.downloadReportPDF = async function(reportId) {

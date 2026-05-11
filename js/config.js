@@ -1,28 +1,44 @@
 // Configuration for API URLs
-const BASE_URL = "https://backend-calmspace.onrender.com";
 
-(function() {
-    // Set environment configuration based on hostname
-    const isProduction = window.location.hostname !== 'localhost' && 
-                         !window.location.hostname.includes('127.0.0.1') &&
-                         !window.location.hostname.includes('file://');
-    
+(function () {
+
+    const isProduction =
+        window.location.hostname !== 'localhost' &&
+        !window.location.hostname.includes('127.0.0.1') &&
+        !window.location.hostname.includes('file://');
+
     if (isProduction) {
-        // Production environment
-        window.ENV_API_URL = 'https://calmspace-9a0l.onrender.com';
+
+        // Production
+        window.ENV_API_URL = 'https://backend-calmspace.onrender.com';
+
+        // ML Flask URL
+        window.ML_API_URL = 'https://backend-calmspace-1.onrender.com';
+
         console.log('Running in production mode');
+
     } else {
-        // Development environment
-        window.ENV_API_URL = `${BASE_URL}`;
+
+        // Local development
+        window.ENV_API_URL = 'http://localhost:5001';
+
+        // Local Flask ML server
+        window.ML_API_URL = 'http://localhost:5000';
+
         console.log('Running in development mode');
     }
-    
-    console.log('API URL configured:', window.ENV_API_URL);
-    
-    // Set up global configuration object
+
+    console.log('Backend API URL:', window.ENV_API_URL);
+    console.log('ML API URL:', window.ML_API_URL);
+
+    // Global config
     window.ENV_CONFIG = {
-        // API URLs
+
+        // Express backend
         backendApiUrl: window.ENV_API_URL,
-        mlServiceUrl: window.ENV_API_URL.replace('5001', '5000') + '/predict_emotion'
+
+        // Flask ML route
+        mlServiceUrl: window.ML_API_URL + '/predict_emotion'
     };
+
 })();

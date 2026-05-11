@@ -1,5 +1,5 @@
         // Global variables - declared only once
-        const BASE_URL = "https://backend-calmspace.onrender.com";
+        const BASE_URL = "http://localhost:5001";
         let specialists = [];
         let selectedSpecialist = null;
         let selectedDate = null;

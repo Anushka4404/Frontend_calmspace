@@ -1,4 +1,4 @@
-const BASE_URL = "https://backend-calmspace.onrender.com";
+// const BASE_URL = "https://backend-calmspace.onrender.com";
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in
     const authToken = localStorage.getItem('authToken');
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API Configuration
     const apiConfig = window.ENV_CONFIG || {
-        // backendApiUrl: 'http://localhost:5001',
-        backendApiUrl: `${BASE_URL}`,
+        backendApiUrl: 'http://localhost:5001',
+        //backendApiUrl: `${BASE_URL}`,
         mlServiceUrl: 'http://localhost:5000/predict_emotion'
     };
     
@@ -114,9 +114,13 @@ document.addEventListener('DOMContentLoaded', function() {
     async function checkMoodStatus() {
         try {
             const apiUrl = `${apiConfig.backendApiUrl}/api/mood/recent`;
+            const token = localStorage.getItem('authToken');
             const response = await fetch(apiUrl, {
                 method: 'GET',
-                headers
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             });
             
             const data = await response.json();
@@ -583,7 +587,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         
         // Format AI responses for better readability
-        let formattedText = text;
+        // let formattedText = text;
+        let formattedText = text || "I'm here to support you.";
         if (sender === 'ai') {
             formattedText = formatAIResponse(text);
             // Speak the AI response if TTS is enabled (now enabled by default)
@@ -1315,9 +1320,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const context = prepareContext(userMessage);
             
             // Send to backend AI service
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.error('No token found');
+                return "Please login first.";
+            }
+
             const response = await fetch(`${apiConfig.backendApiUrl}/api/ai/chat`, {
                 method: 'POST',
-                headers,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({
                     message: userMessage,
                     context: context,
@@ -1335,12 +1349,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             console.log('AI service response data:', data);
-            
-            if (data.success) {
-                return data.response;
-            } else {
-                throw new Error(data.message || 'Failed to generate response');
-            }
+            return data.response || "No response received.";
+
+            // if (data.success) {
+            //     return data.response;
+            // } else {
+            //     throw new Error(data.message || 'Failed to generate response');
+            // }
         } catch (error) {
             console.error('Error generating AI response:', error);
             
@@ -1686,13 +1701,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check recent mood and update mood tracker button
     async function checkAndUpdateMoodButton() {
+        const authToken = localStorage.getItem('authToken');
         if (!authToken) return;
         
         try {
             const apiUrl = `${apiConfig.backendApiUrl}/api/mood/recent`;
+            const token = authToken;
             const response = await fetch(apiUrl, {
                 method: 'GET',
-                headers
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             });
             
             const data = await response.json();

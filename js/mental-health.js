@@ -1,4 +1,4 @@
-const BASE_URL = "https://backend-calmspace.onrender.com";
+// const BASE_URL = "https://backend-calmspace.onrender.com";
 document.addEventListener('DOMContentLoaded', function() {
     // Check authentication
     const authToken = localStorage.getItem('authToken');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // API configuration
     const apiConfig = {
-        backendApiUrl: window.ENV_CONFIG?.backendApiUrl || `${BASE_URL}/api`
+        backendApiUrl: window.ENV_CONFIG?.backendApiUrl || `http://localhost:5001/api`
     };  
 
     // Headers for API requests

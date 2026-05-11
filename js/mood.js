@@ -1,4 +1,4 @@
-const BASE_URL = "https://backend-calmspace.onrender.com";
+// const BASE_URL = "https://backend-calmspace.onrender.com";
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in
@@ -60,10 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API Configuration - will be loaded from server
     let apiConfig = {
-        // backendApiUrl: 'http://localhost:5001', // Default fallback
-        // mlServiceUrl: 'http://localhost:5000/predict_emotion' // Default fallback
-        backendApiUrl: `${BASE_URL}/api`, // Default fallback
-        mlServiceUrl: `${BASE_URL}/predict_emotion` // Default fallback
+        backendApiUrl: 'http://localhost:5001/api', // Default backend fallback
+        mlServiceUrl: 'http://localhost:5000/predict_emotion' // Direct Flask ML service
     };
     
     // Initialize the page
@@ -713,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Fallback: Try the Node.js backend endpoint which has its own fallback
             try {
                 console.log('Trying Node.js backend fallback...');
-                const apiUrl = `${BASE_URL}/api/mood/analyze`;
+                const apiUrl = 'http://localhost:5001/api/mood/analyze';
                 
                 // Create a new FormData for the backend request
                 const newFormData = new FormData();

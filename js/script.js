@@ -1,4 +1,4 @@
-const BASE_URL = "https://backend-calmspace.onrender.com/";
+// const BASE_URL = "https://backend-calmspace.onrender.com/";
 
 document.addEventListener('DOMContentLoaded', function () {
     // Mobile menu toggle - Enhanced for all pages
@@ -1443,7 +1443,7 @@ function getApiUrl() {
     }
     // Fallback for local development
     // return 'http://localhost:5000';
-    return `${BASE_URL}`;
+    return `http://localhost:5001`;
 }
 
 // Connect login and register buttons to dialogs
