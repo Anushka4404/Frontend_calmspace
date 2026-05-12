@@ -1,5 +1,5 @@
 // Profile Page JavaScript
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = window.ENV_CONFIG?.backendApiUrl || "https://backend-calmspace-2.onrender.com";
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in

@@ -1,5 +1,5 @@
         // Global variables - declared only once
-        const BASE_URL = "http://localhost:5001";
+        const BASE_URL = window.ENV_CONFIG?.backendApiUrl || "https://backend-calmspace-2.onrender.com";
         let specialists = [];
         let selectedSpecialist = null;
         let selectedDate = null;
