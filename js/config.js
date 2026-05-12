@@ -13,7 +13,7 @@
         window.ENV_API_URL = 'https://backend-calmspace-2.onrender.com';
 
         // ML Flask URL
-        window.ML_API_URL = 'https://backend-calmspace-3.onrender.com';
+        window.ML_API_URL = 'https://backend-calmspace-3.onrender.com/predict_emotion';
 
         console.log('Running in production mode');
 
